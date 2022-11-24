@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
+
 import org.apache.commons.codec.digest.MurmurHash3;
 
 public class Main {
@@ -28,7 +29,7 @@ public class Main {
         for (int i = 0; dna.length() - i >= 6 ; i++) {
             //hash function
             substring = dna.substring(i, i + merDistribution);
-            key = Math.abs(MurmurHash3.hash32x86(substring.getBytes()) % merDistribution - 1);
+            key = Math.abs(MurmurHash3.hash32x86(substring.getBytes()) % dna.length() - 1);
             if (!arr[key].contains(substring)) {
                 kmer = new Kmer(substring);
                 kmer.setNumOccurrences(kmer.getNumOccurrences() + 1);
@@ -50,7 +51,7 @@ public class Main {
         }
 
         for (Kmer k: kmers) {
-            System.out.println(k.getNumOccurrences());
+            System.out.println(k.getName() + " " + k.getNumOccurrences());
         }
 
     }
