@@ -15,11 +15,9 @@ public class Main {
         int merDistribution = input.nextInt();
 
         LinkedList<String>[] arr = new LinkedList[dna.length()];
-        ArrayList<Kmer> kmers = new ArrayList<Kmer>();
-
+        ArrayList<Kmer> kmerDistribution = new ArrayList<Kmer>();
         int key;
         String substring;
-        Kmer kmer;
 
         //initialize the linkedlists
         for (int i = 0; i < dna.length(); i++) {
@@ -30,27 +28,27 @@ public class Main {
             //hash function
             substring = dna.substring(i, i + merDistribution);
             key = Math.abs(MurmurHash3.hash32x86(substring.getBytes()) % dna.length() - 1);
-            if (!arr[key].contains(substring)) {
-                kmer = new Kmer(substring);
-                kmer.setNumOccurrences(kmer.getNumOccurrences() + 1);
-                kmers.add(kmer);
-            } else {
-                boolean found = false;
-                for (int j = 0; j < kmers.size() && !found; j++) {
-                    if (kmers.get(j).getName().equals(substring)) {
-                        kmers.get(j).setNumOccurrences(kmers.get(j).getNumOccurrences() + 1);
-                        found = true;
+            if (!arr[key].contains(substring)) kmerDistribution.add(new Kmer(substring));
+            arr[key].add(substring);
+        }
+
+        for (Kmer k: kmerDistribution) {
+            boolean isFound = false;
+            for (int i = 0; i < arr.length && !isFound; i++) {
+                if (arr[i].contains(k.getName())) {
+                    for (int j = 0; j < arr[i].size(); j++) {
+                        if (arr[i].get(j).equals(k.getName())) k.setNumOccurrences(k.getNumOccurrences() + 1);
                     }
+                    isFound = true;
                 }
             }
-            arr[key].add(substring);
         }
 
         for (LinkedList s : arr) {
             System.out.println(s);
         }
 
-        for (Kmer k: kmers) {
+        for (Kmer k: kmerDistribution) {
             System.out.println(k.getName() + " " + k.getNumOccurrences());
         }
 
