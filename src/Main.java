@@ -24,7 +24,7 @@ public class Main {
             arr[i] = new LinkedList<String>();
         }
 
-        for (int i = 0; dna.length() - i >= 6 ; i++) {
+        for (int i = 0; i < dna.length() - merDistribution + 1 ; i++) {
             //hash function
             substring = dna.substring(i, i + merDistribution);
             key = Math.abs(MurmurHash3.hash32x86(substring.getBytes()) % dna.length() - 1);
