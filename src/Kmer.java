@@ -4,15 +4,15 @@ public class Kmer {
 
     public Kmer(String name) {
         this.name = name;
-        this.numOccurrences = 0;
+        this.numOccurrences = 1;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setNumOccurrences(int numOccurrences) {
-        this.numOccurrences = numOccurrences;
+    public void setNumOccurrences() {
+        this.numOccurrences++;
     }
 
     public int getNumOccurrences() {
