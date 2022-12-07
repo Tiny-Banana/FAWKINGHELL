@@ -15,20 +15,34 @@ public class Main {
 
         LinkedList<String>[] hashTable = new LinkedList[dna.length()];
         ArrayList<Kmer> kmerDistribution = new ArrayList<Kmer>();
-        int key;
 
         //initialize the linkedlists
         for (int i = 0; i < dna.length(); i++) {
             hashTable[i] = new LinkedList<String>();
         }
 
-        //create hashtable
-        for (int i = 0; i < dna.length() - merDistribution + 1 ; i++) {
-            String substring = dna.substring(i, i + merDistribution);
-            key = Math.abs(MurmurHash3.hash32x86(substring.getBytes()) % dna.length());
-            hashTable[key].add(substring);
+        createHashTable(dna, merDistribution, hashTable);
+        createKmerDistribution(hashTable, kmerDistribution);
+
+        for (LinkedList s : hashTable) {
+            System.out.println(s);
         }
 
+        for (Kmer k: kmerDistribution) {
+            System.out.println(k.getName() + " " + k.getNumOccurrences());
+        }
+    }
+
+    public static void createHashTable(String dna, int merDistribution, LinkedList<String>[] hashTable) {
+        //create hashtable
+        int index;
+        for (int i = 0; i < dna.length() - merDistribution + 1 ; i++) {
+            String substring = dna.substring(i, i + merDistribution);
+            index = Math.abs(MurmurHash3.hash32x86(substring.getBytes()) % dna.length());
+            hashTable[index].add(substring);
+        }
+    }
+    public  static void createKmerDistribution(LinkedList<String>[] hashTable, ArrayList<Kmer> kmerDistribution) {
         //create kmer distribution
         for (int i = 0; i < hashTable.length; i++) {
             for (int j = 0; j < hashTable[i].size(); j++) {
@@ -46,17 +60,10 @@ public class Main {
                 }
             }
         }
-
-
-
-        for (LinkedList s : hashTable) {
-            System.out.println(s);
-        }
-
-        for (Kmer k: kmerDistribution) {
-            System.out.println(k.getName() + " " + k.getNumOccurrences());
-        }
     }
 }
+
+
+
 
 //taccaccaccatag
