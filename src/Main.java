@@ -8,51 +8,62 @@ public class Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
-        //try catch so that the input will only take the valid characters
         System.out.println("Input: ");
         String dna = input.nextLine();
         System.out.println("K-mer: ");
         int merDistribution = input.nextInt();
 
-        LinkedList<String>[] arr = new LinkedList[dna.length()];
-        ArrayList<Kmer> kmers = new ArrayList<Kmer>();
-
-        int key;
-        String substring;
-        Kmer kmer;
+        LinkedList<String>[] hashTable = new LinkedList[dna.length()];
+        ArrayList<Kmer> kmerDistribution = new ArrayList<Kmer>();
 
         //initialize the linkedlists
         for (int i = 0; i < dna.length(); i++) {
-            arr[i] = new LinkedList<String>();
+            hashTable[i] = new LinkedList<String>();
         }
 
-        for (int i = 0; dna.length() - i >= 6 ; i++) {
-            //hash function
-            substring = dna.substring(i, i + merDistribution);
-            key = Math.abs(MurmurHash3.hash32x86(substring.getBytes()) % dna.length() - 1);
-            if (!arr[key].contains(substring)) {
-                kmer = new Kmer(substring);
-                kmer.setNumOccurrences(kmer.getNumOccurrences() + 1);
-                kmers.add(kmer);
-            } else {
-                boolean found = false;
-                for (int j = 0; j < kmers.size() && !found; j++) {
-                    if (kmers.get(j).getName().equals(substring)) {
-                        kmers.get(j).setNumOccurrences(kmers.get(j).getNumOccurrences() + 1);
-                        found = true;
-                    }
-                }
-            }
-            arr[key].add(substring);
-        }
+        createHashTable(dna, merDistribution, hashTable);
+        createKmerDistribution(hashTable, kmerDistribution);
 
-        for (LinkedList s : arr) {
+        for (LinkedList s : hashTable) {
             System.out.println(s);
         }
 
-        for (Kmer k: kmers) {
+        for (Kmer k: kmerDistribution) {
             System.out.println(k.getName() + " " + k.getNumOccurrences());
         }
+    }
 
+    public static void createHashTable(String dna, int merDistribution, LinkedList<String>[] hashTable) {
+        //create hashtable
+        int index;
+        for (int i = 0; i < dna.length() - merDistribution + 1 ; i++) {
+            String substring = dna.substring(i, i + merDistribution);
+            index = Math.abs(MurmurHash3.hash32x86(substring.getBytes()) % dna.length());
+            hashTable[index].add(substring);
+        }
+    }
+    public  static void createKmerDistribution(LinkedList<String>[] hashTable, ArrayList<Kmer> kmerDistribution) {
+        //create kmer distribution
+        for (int i = 0; i < hashTable.length; i++) {
+            for (int j = 0; j < hashTable[i].size(); j++) {
+                String substring = hashTable[i].get(j);
+                boolean isFound = false;
+                if (kmerDistribution.size() == 0) kmerDistribution.add(new Kmer(substring));
+                else {
+                    for (int k = 0; k < kmerDistribution.size() && !isFound; k++) {
+                        if (substring.compareTo(kmerDistribution.get(k).getName()) == 0) {
+                            kmerDistribution.get(k).setNumOccurrences();
+                            isFound = true;
+                        }
+                    }
+                    if (!isFound) kmerDistribution.add(new Kmer(substring));
+                }
+            }
+        }
     }
 }
+
+
+
+
+//taccaccaccatag
