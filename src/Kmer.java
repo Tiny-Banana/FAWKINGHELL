@@ -1,22 +1,25 @@
 public class Kmer {
-    private String name;
+    private String substring;
     private int numOccurrences;
 
-    public Kmer(String name) {
-        this.name = name;
-        this.numOccurrences = 1;
+    public Kmer(String substring, int numOccurrences) {
+        this.substring = substring;
+        this.numOccurrences = numOccurrences;
     }
 
-    public String getName() {
-        return name;
+    public String getSubstring() {
+        return substring;
     }
 
-    public void setNumOccurrences() {
-        this.numOccurrences++;
+    public void setNumOccurrences(int numOccurrences) {
+        this.numOccurrences = numOccurrences;
     }
 
     public int getNumOccurrences() {
         return numOccurrences;
     }
-
+    @Override
+    public String toString() {
+        return "Kmer: " + substring + ", " + numOccurrences;
+    }
 }
