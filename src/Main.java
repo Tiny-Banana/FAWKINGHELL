@@ -9,12 +9,14 @@ public class Main {
         System.out.println("K-mer: ");
         int merDistribution = input.nextInt();
 
-        HashTable hashTable = new HashTable(dna.length());
-        createHashTable(dna, merDistribution, hashTable);
+        HashTable hashTable1 = new HashTable(dna.length(), "mm3");
+        HashTable hashTable2 = new HashTable(dna.length(), "xxhash");
+        createHashTable(dna, merDistribution, hashTable1);
+        createHashTable(dna, merDistribution, hashTable2);
         //create kmerdistribution arraylist if needed
     }
     public static void createHashTable(String dna, int merDistribution, HashTable hashTable) {
-        //create hashtable
+        //create hashtables
         for (int i = 0; i < dna.length() - merDistribution + 1 ; i++) {
             String substring = dna.substring(i, i + merDistribution);
             hashTable.insert(substring, 1);
