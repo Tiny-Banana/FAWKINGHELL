@@ -4,10 +4,12 @@ import java.util.LinkedList;
 public class HashTable {
     LinkedList<Kmer>[] hashTable;
     int size;
+    int collisionCounter;
 
     public HashTable(int size) {
         this.hashTable = new LinkedList[size];
         this.size = size;
+        this.collisionCounter = 0;
         intializeHashTable();
     }
 
@@ -20,6 +22,7 @@ public class HashTable {
     public void insert(String key, int value) {
         int index = Math.abs(MurmurHash3.hash32x86(key.getBytes()) % size);
         boolean isFound = false;
+        if (hashTable[index].size() != 0) collisionCounter++;
         for (int i = 0; i < hashTable[index].size() && !isFound; i++) {
             Kmer kmer = hashTable[index].get(i);
             if (kmer.getSubstring().compareTo(key) == 0) {
@@ -44,5 +47,6 @@ public class HashTable {
         for (LinkedList s : hashTable) {
             System.out.println(s);
         }
+        System.out.println("Collision count: " + collisionCounter);
     }
 }
